@@ -1,0 +1,26 @@
+<h2>Command Manager</h2>
+<div id="list"></div>
+<button onclick="save()">Save</button>
+
+<script>
+let data
+fetch("/api/commands").then(r => r.json()).then(d => {
+  data = d
+  let h = ""
+  for (let c in d) {
+    h += `<label>
+      <input type="checkbox" ${d[c] ? "checked" : ""} onchange="data['${c}']=this.checked">
+      ${c}
+    </label><br>`
+  }
+  list.innerHTML = h
+})
+
+function save() {
+  fetch("/api/commands/save", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(() => alert("Saved ✅"))
+}
+</script>
