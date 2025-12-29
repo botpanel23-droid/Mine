@@ -1,0 +1,27 @@
+<h2>WhatsApp Bot Panel</h2>
+
+<input id="num" placeholder="9477xxxxxxx">
+<button onclick="pair()">Connect</button>
+
+<p id="status"></p>
+
+<a href="commands.html">Manage Commands</a>
+
+<script>
+async function pair() {
+  const n = num.value
+  const r = await fetch("/api/pair", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ number: n })
+  })
+  const d = await r.json()
+  alert("PAIR CODE: " + d.code)
+}
+
+setInterval(async () => {
+  const r = await fetch("/api/status")
+  const d = await r.json()
+  status.innerText = "Status: " + d.status
+}, 2000)
+</script>
